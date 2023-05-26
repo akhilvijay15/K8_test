@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     parameters {
-        string(name: 'K8-deployment', defaultValue: 'K8-deployment-dc65ad58eb615b0c.elb.us-east-1.amazonaws.com', description: 'provide the image tag to be deployed')
+        string(name: 'KUBE_API_EP', defaultValue: 'https://myapp-alb-237990644.us-east-1.elb.amazonaws.com', description: 'provide the image tag to be deployed')
         string(name: 'cert_name', defaultValue: 'deploy-qa.crt', description: 'Add/Select the K8s CERT filename of the cluster you want to connect') 
     }
     environment {
@@ -33,7 +33,7 @@ pipeline {
         stage("k8s-deployment")
 		{
 			steps{
-                withCredentials([string(credentialsId: 'K8-TOKEN', variable: 'KUBE_API_TOKEN')]) {
+                withCredentials([string(credentialsId: 'K8-Token', variable: 'KUBE_API_TOKEN')]) {
                 sh '''
                 sh $WORKSPACE/certs/set-k8s-context.sh $KUBE_API_EP $KUBE_API_TOKEN $CERT
                 kubectl apply -f . --insecure-skip-tls-verify
